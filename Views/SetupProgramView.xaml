@@ -1,0 +1,232 @@
+﻿<UserControl x:Class="SCARA_ROBOT_SOFTWARE_WPF.Views.SetupProgramView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:helix="http://helix-toolkit.org/wpf"
+             MinWidth="1592" MinHeight="985">
+    <UserControl.Resources>
+        <Style x:Key="RoundedButton" TargetType="Button">
+            <Setter Property="FontSize" Value="14"/>
+     
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#889"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="True" UseLayoutRounding="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </UserControl.Resources>
+    <Border Background="White" CornerRadius="10" Padding="0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- 3D Robot SCARA -->
+            <Border Grid.Row="0" Grid.Column="0" Margin="8,8,12,12" Padding="0" CornerRadius="10" Background="Transparent" BorderBrush="#CCC" BorderThickness="1" >
+                <helix:HelixViewport3D x:Name="RobotViewport"
+                                       ZoomExtentsWhenLoaded="True"
+                                       ShowCoordinateSystem="True"
+                                       Background="Transparent"
+                                       Margin="0">
+                    <helix:DefaultLights/>
+                </helix:HelixViewport3D>
+            </Border>
+
+            <!-- Bảng điều khiển bên phải (giữ nguyên như cũ) -->
+            <Border Grid.Row="0" Grid.Column="1" BorderBrush="#CCC" BorderThickness="1" CornerRadius="10" Padding="16" Background="Transparent" Margin="0,8,8,12">
+                <StackPanel Grid.Row="0" Grid.Column="1" Margin="12" VerticalAlignment="Stretch">
+                    <TextBlock Text="Information" FontSize="25" FontWeight="Bold" Margin="0,0,0,16" HorizontalAlignment="Center"/>
+                    <!-- Px -->
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Px:" FontWeight="Bold" Margin="0,0,0,10" VerticalAlignment="Center" FontSize="20" Grid.Column="0"/>
+                        <TextBox Height="32" Text="{Binding SelectedPoint.Px}" Margin="6,0,0,10" Grid.Column="1"/>
+                    </Grid>
+                    <!-- Py -->
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Py:" FontWeight="Bold" Margin="0,0,0,10" VerticalAlignment="Center" FontSize="20" Grid.Column="0"/>
+                        <TextBox Height="32" Text="{Binding SelectedPoint.Py}" Margin="6,0,0,10" Grid.Column="1"/>
+                    </Grid>
+                    <!-- Pz -->
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Pz:" FontWeight="Bold" Margin="0,0,0,10" VerticalAlignment="Center" FontSize="20" Grid.Column="0"/>
+                        <TextBox Height="32" Text="{Binding SelectedPoint.Pz}" Margin="6,0,0,10" Grid.Column="1"/>
+                    </Grid>
+                    <!-- Cap -->
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Wrist:" FontWeight="Bold" Margin="0,0,0,10" VerticalAlignment="Center" FontSize="20" Grid.Column="0"/>
+                        <TextBox Height="32" Text="{Binding SelectedPoint.Yaw}" Margin="6,0,0,10" Grid.Column="1"/>
+                    </Grid>
+                    <!-- Nút Set, Home -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,16,0,0">
+                        <Button Style="{StaticResource RoundedButton}" 
+                                Content="Set Point" 
+                                Width="100" 
+                                Height="38" 
+                                Margin="0,0,10,0"
+                                Command="{Binding SetPointCommand}"/>
+                        <Button Style="{StaticResource RoundedButton}"
+                                Content="Home" 
+                                Width="100" 
+                                Height="38" 
+                                Margin="10,0,0,0"
+                                Command="{Binding HomeCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+
+            </Border>
+            <!-- Px,Py Control và Py Control (row 1, col 0) -->
+            <Grid Grid.Row="1" Grid.Column="0" Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Px, Py Control" FontWeight="Bold" FontSize="16" Margin="0,18,0,0" HorizontalAlignment="Center"/>
+                <!-- Px, Py Control -->
+                <Border Grid.Column="0" BorderBrush="#CCC" BorderThickness="1" CornerRadius="10" Padding="16" Background="Transparent" Margin="8,0,6,8">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button x:Name="btnYUp" 
+                                    Grid.Row="0" 
+                                    Grid.Column="1" 
+                                    Width="60" Height="60" 
+                                    Background="#82B3FF" 
+                                    Content="↑" 
+                                    FontSize="22" 
+                                    Margin="7"
+                                    PreviewMouseLeftButtonDown="btnYUp_MouseDown"
+                                    PreviewMouseLeftButtonUp="btnYUp_MouseUp"/>
+                            <Button x:Name="btnXLeft" 
+                                    Grid.Row="1" 
+                                    Grid.Column="0" 
+                                    Width="60" 
+                                    Height="60" 
+                                    Background="#82B3FF" 
+                                    Content="←" 
+                                    FontSize="22" 
+                                    Margin="7"
+                                    PreviewMouseLeftButtonDown="btnXLeft_MouseDown"
+                                    PreviewMouseLeftButtonUp="btnXLeft_MouseUp"/>
+                            <Button x:Name="btnXRight" 
+                                    Grid.Row="1" 
+                                    Grid.Column="2" 
+                                    Width="60" 
+                                    Height="60" 
+                                    Background="#82B3FF" 
+                                    Content="→" 
+                                    FontSize="22" 
+                                    Margin="7"
+                                    PreviewMouseLeftButtonDown="btnXRight_MouseDown"
+                                    PreviewMouseLeftButtonUp="btnXRight_MouseUp"/>
+                            <Button x:Name="btnYDown" 
+                                    Grid.Row="2" 
+                                    Grid.Column="1" 
+                                    Width="60" 
+                                    Height="60" 
+                                    Background="#82B3FF" 
+                                    Content="↓" 
+                                    FontSize="22" 
+                                    Margin="7"
+                                    PreviewMouseLeftButtonDown="btnYDown_MouseDown"
+                                    PreviewMouseLeftButtonUp="btnYDown_MouseUp"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Pz Control -->
+                <TextBlock Text="Pz Control" Grid.Column="1" FontWeight="Bold" FontSize="16" Margin="0,18,0,0" HorizontalAlignment="Center"/>
+                <Border Grid.Column="1" BorderBrush="#CCC" BorderThickness="1" CornerRadius="10" Padding="16" Background="Transparent" Margin="6,0,12,8">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <StackPanel HorizontalAlignment="Center">
+                            <Button x:Name="btnZUp" 
+                                    Width="60" 
+                                    Height="60" 
+                                    Background="#82B3FF" 
+                                    Content="↑" 
+                                    FontSize="22" 
+                                    Margin="7,7,7,25"
+                                    PreviewMouseLeftButtonDown="btnZUp_MouseDown"
+                                    PreviewMouseLeftButtonUp="btnZUp_MouseUp"/>
+                            <Button x:Name="btnZDown" 
+                                    Width="60" Height="60" 
+                                    Background="#82B3FF" 
+                                    Content="↓" 
+                                    FontSize="22" 
+                                    Margin="7,25,7,7"
+                                    PreviewMouseLeftButtonDown="btnZDown_MouseDown"
+                                    PreviewMouseLeftButtonUp="btnZDown_MouseUp"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Wrist Control" FontWeight="Bold" FontSize="16" Margin="0,18,0,0" HorizontalAlignment="Center"/>
+            <Border Grid.Row="1" Grid.Column="1" BorderBrush="#CCC" BorderThickness="1" CornerRadius="10" Padding="16" Background="Transparent" Margin="0,0,8,8">
+                <StackPanel VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button x:Name="btnCapLeft"
+                                Width="60" 
+                                Height="60" 
+                                Background="#82B3FF" 
+                                Content="←" 
+                                FontSize="22" 
+                                Margin="7,7,25,7"
+                                PreviewMouseLeftButtonDown="btnCapLeft_MouseDown"
+                                PreviewMouseLeftButtonUp="btnCapLeft_MouseUp"/>
+                        <Button x:Name="btnCapRight"
+                                Width="60" 
+                                Height="60" 
+                                Background="#82B3FF" 
+                                Content="→" 
+                                FontSize="22" 
+                                Margin="25,7,7,7"
+                                PreviewMouseLeftButtonDown="btnCapRight_MouseDown"
+                                PreviewMouseLeftButtonUp="btnCapRight_MouseUp"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>
