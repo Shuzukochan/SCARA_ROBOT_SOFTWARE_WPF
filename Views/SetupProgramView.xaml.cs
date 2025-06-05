@@ -318,5 +318,47 @@ namespace SCARA_ROBOT_SOFTWARE_WPF.Views
         {
             (DataContext as SetupProgramViewModel)?.StopHold();
         }
+
+        private void PointA_Click(object sender, RoutedEventArgs e)
+        {
+            MoveToPoint("A");
+        }
+
+        private void PointB_Click(object sender, RoutedEventArgs e)
+        {
+            MoveToPoint("B");
+        }
+
+        private void PointC_Click(object sender, RoutedEventArgs e)
+        {
+            MoveToPoint("C");
+        }
+
+        private void PointD_Click(object sender, RoutedEventArgs e)
+        {
+            MoveToPoint("D");
+        }
+
+        private void MoveToPoint(string pointName)
+        {
+            switch (pointName)
+            {
+                case "A":
+                    Console.WriteLine("Moving to point A");
+                    break;
+                case "B":
+                    Console.WriteLine("Moving to point B");
+                    break;
+                case "C":
+                    Console.WriteLine("Moving to point C");
+                    break;
+                case "D":
+                    Console.WriteLine("Moving to point D");
+                    break;
+                default:
+                    Console.WriteLine($"Moving to point {pointName}");
+                    break;
+            }
+        }
     }
 }
